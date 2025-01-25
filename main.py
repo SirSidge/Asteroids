@@ -3,6 +3,7 @@ from constants import *
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from circleshape import CircleShape
 
 def main():
     pygame.init()
@@ -23,7 +24,7 @@ def main():
 
     #instantiate player
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    asteroidfield = AsteroidField()
+    asteroid_field = AsteroidField()
 
     while True:
         for event in pygame.event.get():
@@ -33,6 +34,11 @@ def main():
 
         for obj in updatable_group:
             obj.update(dt)
+
+        for asteroid in asteroids_group:
+            if CircleShape.collision_check(player, asteroid):
+                print("Game over!")
+                raise Exception(SystemExit)
         
         #Not sure why screen.fill is separating the updatable and drawable group. Do you want to make sure you upadte before you draw? The background is top priority though right?
         screen.fill("black")

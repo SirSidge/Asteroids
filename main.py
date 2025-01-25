@@ -28,7 +28,6 @@ def main():
     asteroid_field = AsteroidField()
 
     Shot.containers = (shots_group, updatable_group, drawable_group)
-    #shot = Shot(player.position.x, player.position.y, radius)
 
     while True:
         for event in pygame.event.get():
@@ -43,6 +42,10 @@ def main():
             if CircleShape.collision_check(player, asteroid):
                 print("Game over!")
                 raise Exception(SystemExit)
+            for bullet in shots_group:
+                if CircleShape.collision_check(bullet, asteroid):
+                    asteroid.split()
+                    bullet.kill()
         
         #Not sure why screen.fill is separating the updatable and drawable group. Do you want to make sure you upadte before you draw? The background is top priority though right?
         screen.fill("black")

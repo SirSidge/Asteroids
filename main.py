@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from player import Player
+from asteroid import Asteroid
 
 def main():
     pygame.init()
@@ -10,12 +11,16 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
 
+    #Groups
+    updatable_group = pygame.sprite.Group()
+    drawable_group = pygame.sprite.Group()
+    asteroids_group = pygame.sprite.Group()
+
+    Player.containers = (updatable_group, drawable_group)
+    Asteroid.containers = (asteroids_group, updatable_group, drawable_group)
+
     #instantiate player
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-
-    #Groups
-    updatable_group = pygame.sprite.Group(player)
-    drawable_group = pygame.sprite.Group(player)
 
     while True:
         for event in pygame.event.get():
@@ -23,10 +28,14 @@ def main():
                 return
         screen.fill("black")
 
-        for thing in updatable_group:
-            thing.update(dt)
-        for thing in drawable_group:
-            thing.draw(screen)
+        for obj in updatable_group:
+            obj.update(dt)
+        
+        #Not sure why screen.fill is separating the updatable and drawable group. Do you want to make sure you upadte before you draw? The background is top priority though right?
+        screen.fill("black")
+
+        for obj in drawable_group:
+            obj.draw(screen)
 
         pygame.display.flip()
         
